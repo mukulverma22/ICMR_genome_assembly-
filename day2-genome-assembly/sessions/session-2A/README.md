@@ -183,8 +183,8 @@ fastp \
     --out2 clean_R2.fastq \
     --html fastp_report.html \
     --json fastp_report.json \
-    --qualified_quality_phred 25 \
-    --length_required 30 \
+    --qualified_quality_phred 20 \
+    --length_required 50 \
     --detect_adapter_for_pe \
     --correction \
     --thread 4

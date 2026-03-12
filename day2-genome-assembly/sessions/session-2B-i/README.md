@@ -1,0 +1,299 @@
+# 🖥️ Session 2B-i: Genome Assembly
+
+**⏰ Time:** 14:00 – 15:30  
+**🎯 Goal:** Assemble a viral genome from clean sequencing reads  
+**🛠️ Tools:** Setu · SPAdes
+
+---
+
+## 🧠 Concept: What Is Genome Assembly?
+
+Imagine you take a book, shred it into millions of tiny paper strips (each 150–300 characters long), and then try to **reconstruct the original text** by finding overlapping strips.
+
+That's essentially what genome assembly does!
+
+A DNA sequencer produces millions of short reads. The assembler's job is to:
+1. Find overlapping reads
+2. Merge them into longer sequences called **contigs**
+3. Optionally order and orient contigs into **scaffolds**
+
+### Two Main Assembly Approaches
+
+| Approach | How it works | Best for |
+|----------|--------------|----------|
+| **Overlap-Layout-Consensus (OLC)** | Finds all pairwise overlaps between reads | Long reads (PacBio, Nanopore) |
+| **De Bruijn Graph (DBG)** | Breaks reads into k-mers, builds a graph | Short reads (Illumina) ← Today's method |
+
+### What is a De Bruijn Graph?
+
+SPAdes uses this approach. Here's the core idea:
+
+1. Every read is broken into **k-mers** (substrings of length k)
+2. These k-mers are nodes in a graph
+3. Edges connect k-mers that overlap by k-1 bases
+4. Finding a path through this graph = reconstructing the genome
+
+```
+Read: ATCGATCG
+k=4 → ATCG → TCGA → CGAT → GATC → ATCG
+
+Graph path:
+ATCG → TCGA → CGAT → GATC → ATCG
+          ↓
+    Contig: ATCGATCG ✅
+```
+
+> 🔑 **Key Insight:** Choosing the right k-mer size (k) is critical. Too small = too many connections (tangled graph). Too large = gaps where coverage is low.
+
+### Key Terminology
+
+| Term | Definition |
+|------|------------|
+| **k-mer** | A substring of length k (e.g., ATCG is a 4-mer) |
+| **Contig** | A contiguous assembled sequence with no gaps |
+| **Scaffold** | Contigs joined with estimated gaps (Ns) using paired-end info |
+| **Coverage/Depth** | Average number of reads covering each base of the genome |
+| **N50** | The length L such that 50% of the assembly is in contigs ≥ L |
+
+### What Makes a Good Assembly?
+
+```
+Poor Assembly:          Good Assembly:
+████ ██ █ ██ ████       ████████████████████
+(many short contigs)    (few long contigs)
+
+N50 = 500 bp            N50 = 50,000 bp
+Contigs = 5,000         Contigs = 10
+```
+
+---
+
+## 📁 Required Input Files
+
+| File | Format | Description |
+|------|--------|-------------|
+| `clean_R1.fastq.gz` | FASTQ | Clean forward reads from Session 2A |
+| `clean_R2.fastq.gz` | FASTQ | Clean reverse reads from Session 2A |
+
+```bash
+# Navigate to assembly session directory
+cd sessions/session-2B-i/
+
+# Link clean reads from Session 2A (saves disk space)
+ln -s ../../results/fastp/clean_R1.fastq.gz .
+ln -s ../../results/fastp/clean_R2.fastq.gz .
+```
+
+---
+
+## 🔧 Tool 1: Setu (Viral Genome Assembly Pipeline)
+
+### What is Setu?
+**Setu** is a pipeline specifically designed for **viral genome assembly**. It wraps multiple tools into a streamlined workflow optimized for:
+- High mutation rate viral genomes
+- Mixed infection (quasi-species)
+- Reference-guided and de novo assembly
+
+> 🦠 **Why a special pipeline for viruses?** Viral genomes are small (few kb to a few hundred kb) but can have very high mutation rates. Standard assembly pipelines may miss low-frequency variants.
+
+### Install Setu
+```bash
+# Setu is typically installed via conda
+conda install -c bioconda setu -y
+
+# OR via pip
+pip install setu
+
+# Verify
+setu --version
+```
+
+### Run Setu (Reference-Guided Viral Assembly)
+
+```bash
+mkdir -p results/setu_assembly
+
+# Basic Setu run
+setu \
+    --read1 clean_R1.fastq.gz \
+    --read2 clean_R2.fastq.gz \
+    --outdir results/setu_assembly \
+    --threads 4
+
+# With a reference genome (recommended for viruses)
+setu \
+    --read1 clean_R1.fastq.gz \
+    --read2 clean_R2.fastq.gz \
+    --reference reference_virus.fasta \
+    --outdir results/setu_assembly \
+    --threads 4 \
+    --min-coverage 10
+
+# Flag explanations:
+# --read1/--read2    : Input clean reads
+# --reference        : Reference genome for guided assembly (optional)
+# --outdir           : Output directory
+# --threads          : CPU threads
+# --min-coverage     : Minimum read depth to call a consensus base
+```
+
+### Setu Output Files
+
+```
+results/setu_assembly/
+├── consensus.fasta          ← ✅ Final assembled viral genome
+├── coverage.txt             ← Per-base read depth across genome
+├── variants.vcf             ← Detected variants vs reference
+└── assembly_stats.txt       ← Summary statistics
+```
+
+---
+
+## 🔧 Tool 2: SPAdes
+
+### What is SPAdes?
+**SPAdes** (St. Petersburg genome assembler) is one of the most popular genome assemblers for:
+- Bacterial genomes
+- Viral genomes
+- Metagenomes
+- Single-cell sequencing data
+
+It uses a **multi-k-mer De Bruijn Graph** approach — running the assembly at multiple k-mer sizes and combining results.
+
+### Install SPAdes
+```bash
+conda install -c bioconda spades -y
+
+# Verify
+spades.py --version
+# Expected: SPAdes genome assembler v3.15.x
+```
+
+### Run SPAdes — Basic Assembly
+
+```bash
+mkdir -p results/spades_assembly
+
+spades.py \
+    -1 clean_R1.fastq.gz \
+    -2 clean_R2.fastq.gz \
+    -o results/spades_assembly \
+    --threads 4 \
+    --memory 8
+
+# Flag explanations:
+# -1 / -2         : Paired-end read files (R1 and R2)
+# -o              : Output directory
+# --threads       : Number of CPU cores
+# --memory        : Max RAM in gigabytes
+```
+
+### Run SPAdes — Viral Mode (Recommended for today)
+
+```bash
+spades.py \
+    -1 clean_R1.fastq.gz \
+    -2 clean_R2.fastq.gz \
+    -o results/spades_viral \
+    --threads 4 \
+    --memory 8 \
+    --careful \
+    --cov-cutoff auto
+
+# Additional flags:
+# --careful       : Reduce mismatches (slower but more accurate for viruses)
+# --cov-cutoff auto : Automatically remove low-coverage (likely error) contigs
+```
+
+### SPAdes Output Files
+
+```
+results/spades_assembly/
+├── scaffolds.fasta          ← ✅ Primary output — use this!
+├── contigs.fasta            ← Contigs before scaffolding
+├── assembly_graph.gfa       ← Assembly graph (view in Bandage)
+├── spades.log               ← Full log (check here if errors occur)
+└── K21/ K33/ K55/ K77/      ← Per k-mer assembly results
+```
+
+> 🔑 **Use `scaffolds.fasta` as your final assembly for downstream analysis.**
+
+### Understanding SPAdes Contig Names
+
+Each sequence in the output has a name like:
+```
+>NODE_1_length_45231_cov_85.3
+       │         │          └─ Average coverage depth
+       │         └─ Length in base pairs
+       └─ Node number (1 = longest contig)
+```
+
+### 🎯 Tips for Better SPAdes Assemblies
+
+| Situation | Recommendation |
+|-----------|----------------|
+| Viral genome (<1 Mb) | Use `--careful` mode |
+| High coverage (>100x) | Try `--cov-cutoff auto` |
+| Poor assembly (many contigs) | Check read quality; try different k values with `-k 21,33,55,77` |
+| Metagenomic sample | Replace `spades.py` with `metaspades.py` |
+
+---
+
+## 📊 Quick Assembly Stats Check
+
+Before moving on, do a quick sanity check:
+
+```bash
+# Count number of contigs/scaffolds
+grep -c ">" results/spades_assembly/scaffolds.fasta
+
+# Check total assembly size
+grep -v ">" results/spades_assembly/scaffolds.fasta | tr -d '\n' | wc -c
+
+# View the longest contigs
+grep ">" results/spades_assembly/scaffolds.fasta | head -20
+```
+
+**What to look for (viral genome example):**
+- Viral genomes are typically **5 kb – 200 kb**
+- Good viral assembly: **1–5 contigs** covering most of the genome
+- If you have 1000+ tiny contigs, something went wrong in QC or assembly
+
+---
+
+## 📊 Expected Output After Session 2B-i
+
+```
+results/
+├── setu_assembly/
+│   └── consensus.fasta         ← Setu viral assembly
+└── spades_viral/
+    └── scaffolds.fasta         ← ✅ SPAdes assembly (use this)
+```
+
+---
+
+## 🚨 Common Errors & Fixes
+
+| Error | Likely Cause | Fix |
+|-------|--------------|-----|
+| `== Error ==  system call failed` | Not enough memory | Reduce `--memory` or use a machine with more RAM |
+| Assembly takes forever | Large genome + many reads | Subsample reads: `seqtk sample -s 42 R1.fq.gz 1000000` |
+| Only tiny contigs (<500 bp) | Low coverage or poor QC | Check coverage depth; revisit Fastp settings |
+| SPAdes crashes at k=127 | Read length too short | Omit large k values: `-k 21,33,55,77` |
+
+---
+
+## ✅ Checklist Before Moving to Assessment
+
+- [ ] `scaffolds.fasta` exists in your SPAdes output directory
+- [ ] At least 1 contig is >1000 bp (check with `grep ">" scaffolds.fasta`)
+- [ ] SPAdes log shows "===== Assembling finished. ====="
+
+---
+
+## ➡️ Next Step
+
+Proceed to **[Session 2B-ii: Assembly Quality Assessment](../session-2B-ii/README.md)**
+
+You'll be evaluating how good your assembly is using QUAST, BUSCO, and RagTag!

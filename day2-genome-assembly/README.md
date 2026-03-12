@@ -31,7 +31,7 @@ By the end of today, you will be able to:
 
 ### Option A: Conda (Recommended)
 
-``
+```
 
 # Create a dedicated environment for today
 conda create -n genome-assembly python=3.9 -y

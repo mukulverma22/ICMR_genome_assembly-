@@ -40,27 +40,30 @@ IIIIIIIIIIIIIIIIIIIII         ← Quality scores (ASCII-encoded Phred scores)
 
 ---
 
+
 ## 📁 Required Input Files
 
 | File | Format | Description |
 |------|--------|-------------|
-| `sample_R1.fastq.gz` | FASTQ (gzipped) | Forward reads (Read 1) |
-| `sample_R2.fastq.gz` | FASTQ (gzipped) | Reverse reads (Read 2) — for paired-end data |
+| `sample_R1.fastq` | FASTQ | Forward reads (Read 1) |
+| `sample_R2.fastq` | FASTQ | Reverse reads (Read 2) — for paired-end data |
 
 > 📥 **Get sample data:**
 > ```bash
-> # Download a small test dataset from SRA
-> # Option 1: Use provided sample data in /data/sample/
-> cp ../../data/sample/sample_R1.fastq.gz .
-> cp ../../data/sample/sample_R2.fastq.gz .
->
-> # Option 2: Download from SRA (requires sra-tools)
-> fastq-dump --split-files --gzip SRR2584863
+> Download from SRA (requires sra-tools)
+> fasterq-dump --split-files --progress SRR11945456
 > ```
+
+## Rename the Files :
+
+ ```bash
+mv SRR11945456_1.fastq sample_R1.fastq
+mv SRR11945456_2.fastq sample_R2.fastq
+ ```
 
 ---
 
-## 🔧 Tool 1: FastQC
+## 🔧 Tool : FastQC
 
 ### What is FastQC?
 FastQC is a quality control tool that scans your FASTQ files and generates an **HTML report** with visual plots showing the quality of your data across multiple metrics.
@@ -82,8 +85,8 @@ mkdir fastqc
 
 # Run FastQC on both reads
 fastqc \
-    sample_R1.fastq.gz \
-    sample_R2.fastq.gz \
+    sample_R1.fastq \
+    sample_R2.fastq \
     --outdir fastqc 
 
 # What each flag means:
@@ -96,6 +99,8 @@ fastqc \
 After running, you'll find:
 - `sample_R1_fastqc.html` — Open this in your browser!
 - `sample_R1_fastqc.zip` — Raw data (used by MultiQC later)
+
+  
 
 **Key plots to look at:**
 
@@ -110,7 +115,43 @@ After running, you'll find:
 
 ---
 
-## 🔧 Tool 2: Fastp
+## 🔧 Tool : MultiQC
+
+### What is MultiQC?
+MultiQC aggregates QC results from **multiple samples and tools** into a single beautiful HTML report. Instead of opening 10 individual FastQC reports, you get one interactive dashboard.
+
+### Install MultiQC
+```bash
+conda install -c bioconda multiqc -y
+# OR
+pip install multiqc
+```
+
+### Run MultiQC
+
+```bash
+mkdir -p multiqc
+
+# Run MultiQC on ALL results directories
+# It will find FastQC, Fastp, and other compatible outputs automatically
+multiqc \
+    fastqc \
+    --outdir multiqc 
+
+# Flag explanations:
+# (input dirs)    : MultiQC searches these for recognized output files
+# --outdir        : Where to save the report
+```
+
+> 💡 **Pro tip:** You can simply run `multiqc .` from your project directory and it will find everything automatically!
+
+### Reading the MultiQC Report
+
+Open `results/multiqc/multiqc_report.html` in your browser.
+
+---
+
+## 🔧 Tool : Fastp
 
 ### What is Fastp?
 Fastp is an **all-in-one** FASTQ preprocessor that:
@@ -132,18 +173,18 @@ fastp --version
 ### Run Fastp
 
 ```bash
-mkdir -p results/fastp
+mkdir -p fastp
+cd fastp
 
 fastp \
-    --in1 sample_R1.fastq.gz \
-    --in2 sample_R2.fastq.gz \
-    --out1 results/fastp/clean_R1.fastq.gz \
-    --out2 results/fastp/clean_R2.fastq.gz \
-    --html results/fastp/fastp_report.html \
-    --json results/fastp/fastp_report.json \
-    --qualified_quality_phred 20 \
-    --unqualified_percent_limit 40 \
-    --length_required 50 \
+    --in1 ../sample_R1.fastq \
+    --in2 ../sample_R2.fastq \
+    --out1 clean_R1.fastq \
+    --out2 clean_R2.fastq \
+    --html fastp_report.html \
+    --json fastp_report.json \
+    --qualified_quality_phred 25 \
+    --length_required 30 \
     --detect_adapter_for_pe \
     --correction \
     --thread 4
@@ -153,7 +194,6 @@ fastp \
 # --out1/--out2            : Clean output files
 # --html/--json            : Report formats
 # --qualified_quality_phred: Min quality score to keep a base (Q20)
-# --unqualified_percent_limit: Drop read if >40% bases are below Q20
 # --length_required        : Drop reads shorter than 50 bp after trimming
 # --detect_adapter_for_pe  : Auto-detect adapters for paired-end data
 # --correction             : Correct mismatched bases in overlapping regions
@@ -181,60 +221,10 @@ results/fastp/
 
 ---
 
-## 🔧 Tool 3: MultiQC
-
-### What is MultiQC?
-MultiQC aggregates QC results from **multiple samples and tools** into a single beautiful HTML report. Instead of opening 10 individual FastQC reports, you get one interactive dashboard.
-
-### Install MultiQC
-```bash
-conda install -c bioconda multiqc -y
-# OR
-pip install multiqc
-```
-
-### Run MultiQC
-
-```bash
-mkdir -p results/multiqc
-
-# Run MultiQC on ALL results directories
-# It will find FastQC, Fastp, and other compatible outputs automatically
-multiqc \
-    results/fastqc_raw/ \
-    results/fastp/ \
-    --outdir results/multiqc \
-    --filename multiqc_report.html \
-    --title "Day 2 QC Report"
-
-# Flag explanations:
-# (input dirs)    : MultiQC searches these for recognized output files
-# --outdir        : Where to save the report
-# --filename      : Custom report name
-# --title         : Title shown in the report
-```
-
-> 💡 **Pro tip:** You can simply run `multiqc .` from your project directory and it will find everything automatically!
-
-### Reading the MultiQC Report
-
-Open `results/multiqc/multiqc_report.html` in your browser.
-
-Key sections:
-- **General Statistics** — Summary table comparing all samples side-by-side
-- **FastQC: Per Sequence Quality Scores** — Compare quality distributions
-- **FastQC: Adapter Content** — See if adapters were removed by Fastp
-- **Fastp: Filtering Results** — How many reads passed QC
-
----
 
 ## 📊 Expected Output After Session 2A
 
 ```
-results/
-├── fastqc_raw/
-│   ├── sample_R1_fastqc.html   ← QC of raw reads
-│   └── sample_R2_fastqc.html
 ├── fastp/
 │   ├── clean_R1.fastq.gz       ← ✅ Clean reads for assembly
 │   ├── clean_R2.fastq.gz       ← ✅ Clean reads for assembly

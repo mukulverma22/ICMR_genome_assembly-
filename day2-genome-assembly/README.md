@@ -113,26 +113,6 @@ Final Genome Assembly ✅
 
 ---
 
-## 📂 Repository Structure
-
-```
-day2-genome-assembly/
-├── README.md                    ← You are here
-├── sessions/
-│   ├── session-2A/
-│   │   └── README.md            ← QC Session Guide
-│   ├── session-2B-i/
-│   │   └── README.md            ← Assembly Session Guide
-│   └── session-2B-ii/
-│       └── README.md            ← Assessment Session Guide
-├── data/
-│   └── sample/                  ← Sample data for practice
-├── scripts/
-│   ├── run_qc.sh               ← Automated QC script
-│   ├── run_assembly.sh         ← Automated assembly script
-│   └── run_assessment.sh       ← Automated assessment script
-└── GLOSSARY.md                 ← Key terms explained
-```
 
 ---
 
@@ -150,13 +130,6 @@ See the full [GLOSSARY.md](GLOSSARY.md) for all key terms.
 
 ---
 
-## 🆘 Getting Help
-
-- Open an **Issue** on this repo if something doesn't work
-- Tag your question with the session name (e.g., `[Session 2A]`)
-- Check the [Troubleshooting](TROUBLESHOOTING.md) guide first
-
----
 
 ## 📚 Further Reading
 
@@ -166,4 +139,3 @@ See the full [GLOSSARY.md](GLOSSARY.md) for all key terms.
 
 ---
 
-*Made with ❤️ for the next generation of bioinformaticians*

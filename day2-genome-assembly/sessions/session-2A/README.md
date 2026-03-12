@@ -1,6 +1,5 @@
 # 🖥️ Session 2A: Quality Control of Raw Sequencing Data
 
-**⏰ Time:** 11:45 – 13:00  
 **🎯 Goal:** Assess the quality of raw sequencing data and clean it before assembly  
 **🛠️ Tools:** FastQC · Fastp · MultiQC
 
@@ -71,26 +70,21 @@ FastQC is a quality control tool that scans your FASTQ files and generates an **
 # Via conda
 conda install -c bioconda fastqc -y
 
-# Via apt (Ubuntu/Debian)
-sudo apt-get install fastqc
-
 # Verify
 fastqc --version
-# Expected: FastQC v0.12.x
 ```
 
 ### Run FastQC
 
 ```bash
 # Create output directory
-mkdir -p results/fastqc_raw
+mkdir fastqc
 
 # Run FastQC on both reads
 fastqc \
     sample_R1.fastq.gz \
     sample_R2.fastq.gz \
-    --outdir results/fastqc_raw \
-    --threads 4
+    --outdir fastqc 
 
 # What each flag means:
 # --outdir    : Where to save the HTML reports

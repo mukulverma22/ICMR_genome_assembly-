@@ -1,22 +1,17 @@
 # 🧬 Day 2: From Raw Data to Complete Genomes — The Assembly Quest
 
-> **Workshop Date:** 17th March  
-> **Level:** Beginner-Friendly | Bioinformatics Training Module  
-> **Estimated Time:** Full Day (~8 hours hands-on)
 
 ---
 
 ## 📋 Table of Contents
 
 1. [What You Will Learn Today](#what-you-will-learn-today)
-2. [Prerequisites](#prerequisites)
-3. [Environment Setup](#environment-setup)
-4. [Day Schedule at a Glance](#day-schedule-at-a-glance)
-5. [Session 2A — Quality Control](#-session-2a-quality-control-of-raw-sequencing-data)
-6. [Session 2B-i — Genome Assembly](#-session-2b-i-genome-assembly)
-7. [Session 2B-ii — Assembly Quality Assessment](#-session-2b-ii-assembly-quality-assessment)
-8. [Glossary](#-glossary)
-9. [Further Reading](#-further-reading)
+2. [Environment Setup](#environment-setup)
+3. [Session 2A — Quality Control](#-session-2a-quality-control-of-raw-sequencing-data)
+4. [Session 2B-i — Genome Assembly](#-session-2b-i-genome-assembly)
+5. [Session 2B-ii — Assembly Quality Assessment](#-session-2b-ii-assembly-quality-assessment)
+6. [Glossary](#-glossary)
+
 
 ---
 
@@ -28,17 +23,7 @@ By the end of today, you will be able to:
 - ✅ Run **FastQC**, **Fastp**, and **MultiQC** to assess and clean sequencing reads
 - ✅ Assemble a viral genome using **Setu** and **SPAdes**
 - ✅ Evaluate your assembly using **QUAST**, **BUSCO**, and **RagTag**
-- ✅ Understand what a "good" genome assembly looks like
-
----
-
-## 🧰 Prerequisites
-
-You don't need to be an expert, but it helps to know:
-- Basic Linux command line (navigating directories, running commands)
-- What DNA sequencing is (conceptually)
-
-> 💡 **New to Linux?** Check out [this 10-minute crash course](https://ubuntu.com/tutorials/command-line-for-beginners) before you start.
+- ✅ Understand what a "good" genome assembly looks like.
 
 ---
 
@@ -46,9 +31,7 @@ You don't need to be an expert, but it helps to know:
 
 ### Option A: Conda (Recommended)
 
-```bash
-# Install Miniconda if you haven't already
-# https://docs.conda.io/en/latest/miniconda.html
+``
 
 # Create a dedicated environment for today
 conda create -n genome-assembly python=3.9 -y
@@ -71,19 +54,6 @@ quast.py --version
 busco --version
 ragtag.py --version
 ```
-
----
-
-## 📅 Day Schedule at a Glance
-
-| Time | Activity |
-|------|----------|
-| 09:30 – 11:15 | 🎤 Talks: Genome Assembly Concepts |
-| 11:45 – 13:00 | 🖥️ [Session 2A: QC with FastQC, Fastp, MultiQC](sessions/session-2A/README.md) |
-| 14:00 – 15:30 | 🖥️ [Session 2B-i: Assembly with Setu + SPAdes](sessions/session-2B-i/README.md) |
-| 16:00 – 18:00 | 🖥️ [Session 2B-ii: Quality Assessment with QUAST, BUSCO, RagTag](sessions/session-2B-ii/README.md) |
-
----
 
 ## 🔬 The Big Picture: What Are We Doing Today?
 
@@ -130,12 +100,4 @@ See the full [GLOSSARY.md](GLOSSARY.md) for all key terms.
 
 ---
 
-
-## 📚 Further Reading
-
-- [Bioinformatics Algorithms (Compeau & Pevzner)](https://www.bioinformaticsalgorithms.org/)
-- [The Sequence Read Archive (SRA)](https://www.ncbi.nlm.nih.gov/sra)
-- [Galaxy Training Network — Genome Assembly](https://training.galaxyproject.org/training-material/topics/assembly/)
-
----
 

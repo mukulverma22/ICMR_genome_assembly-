@@ -1,6 +1,5 @@
 # 🖥️ Session 2B-i: Genome Assembly
 
-**⏰ Time:** 14:00 – 15:30  
 **🎯 Goal:** Assemble a viral genome from clean sequencing reads  
 **🛠️ Tools:** Setu · SPAdes
 
@@ -62,7 +61,6 @@ Poor Assembly:          Good Assembly:
 ████ ██ █ ██ ████       ████████████████████
 (many short contigs)    (few long contigs)
 
-N50 = 500 bp            N50 = 50,000 bp
 Contigs = 5,000         Contigs = 10
 ```
 
@@ -72,21 +70,12 @@ Contigs = 5,000         Contigs = 10
 
 | File | Format | Description |
 |------|--------|-------------|
-| `clean_R1.fastq.gz` | FASTQ | Clean forward reads from Session 2A |
-| `clean_R2.fastq.gz` | FASTQ | Clean reverse reads from Session 2A |
-
-```bash
-# Navigate to assembly session directory
-cd sessions/session-2B-i/
-
-# Link clean reads from Session 2A (saves disk space)
-ln -s ../../results/fastp/clean_R1.fastq.gz .
-ln -s ../../results/fastp/clean_R2.fastq.gz .
-```
+| `clean_R1.fastq` | FASTQ | Clean forward reads from Session 2A |
+| `clean_R2.fastq` | FASTQ | Clean reverse reads from Session 2A |
 
 ---
 
-## 🔧 Tool 1: Setu (Viral Genome Assembly Pipeline)
+## 🔧 Tool : Setu (Viral Genome Assembly Pipeline)
 
 ### What is Setu?
 **Setu** is a pipeline specifically designed for **viral genome assembly**. It wraps multiple tools into a streamlined workflow optimized for:
@@ -96,45 +85,26 @@ ln -s ../../results/fastp/clean_R2.fastq.gz .
 
 > 🦠 **Why a special pipeline for viruses?** Viral genomes are small (few kb to a few hundred kb) but can have very high mutation rates. Standard assembly pipelines may miss low-frequency variants.
 
-### Install Setu
+### Install Setu and its dependencies 
 ```bash
-# Setu is typically installed via conda
-conda install -c bioconda setu -y
-
-# OR via pip
-pip install setu
-
-# Verify
-setu --version
+# Setu can be installed using git-clone
+git clone https://github.com/jnarayan81/setu.git
+# install the Dependencies:
+cd setu
+conda env create -f env_setu.yml
 ```
 
 ### Run Setu (Reference-Guided Viral Assembly)
 
 ```bash
-mkdir -p results/setu_assembly
-
-# Basic Setu run
-setu \
-    --read1 clean_R1.fastq.gz \
-    --read2 clean_R2.fastq.gz \
-    --outdir results/setu_assembly \
-    --threads 4
-
-# With a reference genome (recommended for viruses)
-setu \
-    --read1 clean_R1.fastq.gz \
-    --read2 clean_R2.fastq.gz \
-    --reference reference_virus.fasta \
-    --outdir results/setu_assembly \
-    --threads 4 \
-    --min-coverage 10
+mkdir -p setu_output
+./setu/setu.sh -k yes -m pe -t 1 -r fastp/clean_R1.fastq,fastp/clean_R2.fastq -f on -o setu_output
 
 # Flag explanations:
-# --read1/--read2    : Input clean reads
-# --reference        : Reference genome for guided assembly (optional)
-# --outdir           : Output directory
-# --threads          : CPU threads
-# --min-coverage     : Minimum read depth to call a consensus base
+# -r  : Input clean reads
+# -o  : Output directory
+# -t  : CPU threads
+# -m  : mode (single/paired-end)
 ```
 
 ### Setu Output Files
@@ -149,7 +119,7 @@ results/setu_assembly/
 
 ---
 
-## 🔧 Tool 2: SPAdes
+## 🔧 Tool : SPAdes
 
 ### What is SPAdes?
 **SPAdes** (St. Petersburg genome assembler) is one of the most popular genome assemblers for:
@@ -166,49 +136,42 @@ conda install -c bioconda spades -y
 
 # Verify
 spades.py --version
-# Expected: SPAdes genome assembler v3.15.x
 ```
 
 ### Run SPAdes — Basic Assembly
 
 ```bash
-mkdir -p results/spades_assembly
 
 spades.py \
-    -1 clean_R1.fastq.gz \
-    -2 clean_R2.fastq.gz \
-    -o results/spades_assembly \
+    -1 fastp/clean_R1.fastq \
+    -2 fastp/clean_R2.fastq \
+    -o spades_viral \
     --threads 4 \
-    --memory 8
+    --memory 8 \
+    --careful \
+    --cov-cutoff auto
+
 
 # Flag explanations:
 # -1 / -2         : Paired-end read files (R1 and R2)
 # -o              : Output directory
 # --threads       : Number of CPU cores
 # --memory        : Max RAM in gigabytes
-```
-
-### Run SPAdes — Viral Mode (Recommended for today)
-
-```bash
-spades.py \
-    -1 clean_R1.fastq.gz \
-    -2 clean_R2.fastq.gz \
-    -o results/spades_viral \
-    --threads 4 \
-    --memory 8 \
-    --careful \
-    --cov-cutoff auto
-
 # Additional flags:
 # --careful       : Reduce mismatches (slower but more accurate for viruses)
 # --cov-cutoff auto : Automatically remove low-coverage (likely error) contigs
 ```
 
+```bash
+
+
+
+```
+
 ### SPAdes Output Files
 
 ```
-results/spades_assembly/
+spades_viral
 ├── scaffolds.fasta          ← ✅ Primary output — use this!
 ├── contigs.fasta            ← Contigs before scaffolding
 ├── assembly_graph.gfa       ← Assembly graph (view in Bandage)
@@ -245,13 +208,13 @@ Before moving on, do a quick sanity check:
 
 ```bash
 # Count number of contigs/scaffolds
-grep -c ">" results/spades_assembly/scaffolds.fasta
+grep -c ">" spades_viral/scaffolds.fasta
 
 # Check total assembly size
-grep -v ">" results/spades_assembly/scaffolds.fasta | tr -d '\n' | wc -c
+grep -v ">" spades_viral/scaffolds.fasta | tr -d '\n' | wc -c
 
 # View the longest contigs
-grep ">" results/spades_assembly/scaffolds.fasta | head -20
+grep ">" spades_viral/scaffolds.fasta | head -20
 ```
 
 **What to look for (viral genome example):**

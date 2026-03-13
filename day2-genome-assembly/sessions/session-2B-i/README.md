@@ -98,7 +98,7 @@ conda env create -f env_setu.yml
 
 ```bash
 mkdir -p ../setu_output
-./setu.sh -k yes -m pe -t 1 -r ../fastp/clean_R1.fastq,../fastp/clean_R2.fastq -f on -o ../setu_output
+./setu.sh -k yes -m pe -t 3 -r ../fastp/clean_R1.fastq,../fastp/clean_R2.fastq -f on -o ../setu_output
 
 # Flag explanations:
 # -r  : Input clean reads

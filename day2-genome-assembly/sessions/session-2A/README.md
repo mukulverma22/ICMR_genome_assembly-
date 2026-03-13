@@ -50,7 +50,7 @@ IIIIIIIIIIIIIIIIIIIII         ← Quality scores (ASCII-encoded Phred scores)
 
 > 📥 **Get sample data:**
 > ```bash
-> Download from SRA (requires sra-tools)
+> # Download from SRA (requires sra-tools)
 > fasterq-dump --split-files --progress SRR11945456
 > ```
 

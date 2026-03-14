@@ -21,9 +21,9 @@ Assembling reads into contigs doesn't mean you're done. Your assembly could have
 
 ```
 Assembly Quality
-       │
-       ├── Contiguity ──── QUAST  (how fragmented is it?)
-       ├── Completeness ── BUSCO  (are expected genes present?)
+
+        Contiguity ──── QUAST  (how fragmented is it?)
+        Completeness ── BUSCO  (are expected genes present?)
 ```
 
 ---

@@ -53,6 +53,7 @@ spades.py --version
 quast.py --version
 busco --version
 ragtag.py --version
+trimmomatic -version 
 ```
 
 ## 🔬 The Big Picture: What Are We Doing Today?

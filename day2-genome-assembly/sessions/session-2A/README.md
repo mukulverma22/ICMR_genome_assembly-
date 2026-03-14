@@ -49,8 +49,8 @@ IIIIIIIIIIIIIIIIIIIII         ← Quality scores (ASCII-encoded Phred scores)
 | `sample_R2.fastq` | FASTQ | Reverse reads (Read 2) — for paired-end data |
 
 > 📥 **Get sample data:**
-> ```bash
 > # Download from SRA (requires sra-tools)
+> ```bash
 > fasterq-dump --split-files --progress SRR11945456
 > ```
 
@@ -89,10 +89,10 @@ fastqc \
     sample_R2.fastq \
     --outdir fastqc 
 
+```
 # What each flag means:
 # --outdir    : Where to save the HTML reports
 # --threads   : Number of CPU cores to use (speeds things up)
-```
 
 ### Understanding FastQC Output
 
@@ -138,10 +138,10 @@ multiqc \
     fastqc \
     --outdir multiqc 
 
+```
 # Flag explanations:
 # (input dirs)    : MultiQC searches these for recognized output files
 # --outdir        : Where to save the report
-```
 
 > 💡 **Pro tip:** You can simply run `multiqc .` from your project directory and it will find everything automatically!
 
@@ -189,6 +189,7 @@ fastp \
     --correction \
     --thread 4
 
+```
 # Flag explanations:
 # --in1/--in2              : Input files (R1 and R2)
 # --out1/--out2            : Clean output files
@@ -198,7 +199,6 @@ fastp \
 # --detect_adapter_for_pe  : Auto-detect adapters for paired-end data
 # --correction             : Correct mismatched bases in overlapping regions
 # --thread                 : CPU threads
-```
 
 ### What does Fastp output?
 

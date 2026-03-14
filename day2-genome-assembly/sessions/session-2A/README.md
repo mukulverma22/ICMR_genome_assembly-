@@ -9,7 +9,7 @@
 
 When a DNA sequencer produces reads, it isn't perfect. Think of it like OCR scanning a blurry photograph — some letters will be misread. In sequencing, these errors show up as:
 
-- **Low-quality base calls** at the ends of reads (the sequencer gets "tired")
+- **Low-quality base calls** at the ends of reads
 - **Adapter contamination** — synthetic sequences from the library prep that got sequenced accidentally
 - **Overrepresented sequences** — potential contamination or artefacts
 - **GC bias** — uneven representation of certain nucleotides

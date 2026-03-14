@@ -39,7 +39,7 @@ conda activate genome-assembly
 
 # Install all tools at once
 conda install -c bioconda -c conda-forge \
-    fastqc fastp multiqc spades quast busco ragtag samtools seqkit trimmomatic -y
+    sra-tools fastqc fastp multiqc spades quast busco ragtag samtools seqkit trimmomatic -y
 ```
 
 ### Option B: Install Individually (see each session for instructions)

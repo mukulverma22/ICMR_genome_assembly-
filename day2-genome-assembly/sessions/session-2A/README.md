@@ -87,12 +87,14 @@ mkdir fastqc
 fastqc \
     sample_R1.fastq \
     sample_R2.fastq \
-    --outdir fastqc 
+    --outdir fastqc
 
-```
 # What each flag means:
 # --outdir    : Where to save the HTML reports
 # --threads   : Number of CPU cores to use (speeds things up)
+
+```
+
 
 ### Understanding FastQC Output
 
@@ -136,12 +138,14 @@ mkdir -p multiqc
 # It will find FastQC, Fastp, and other compatible outputs automatically
 multiqc \
     fastqc \
-    --outdir multiqc 
+    --outdir multiqc
 
-```
 # Flag explanations:
 # (input dirs)    : MultiQC searches these for recognized output files
 # --outdir        : Where to save the report
+
+
+```
 
 > 💡 **Pro tip:** You can simply run `multiqc .` from your project directory and it will find everything automatically!
 
@@ -189,7 +193,6 @@ fastp \
     --correction \
     --thread 4
 
-```
 # Flag explanations:
 # --in1/--in2              : Input files (R1 and R2)
 # --out1/--out2            : Clean output files
@@ -199,6 +202,9 @@ fastp \
 # --detect_adapter_for_pe  : Auto-detect adapters for paired-end data
 # --correction             : Correct mismatched bases in overlapping regions
 # --thread                 : CPU threads
+
+
+```
 
 ### What does Fastp output?
 

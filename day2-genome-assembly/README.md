@@ -22,7 +22,7 @@ By the end of today, you will be able to:
 - ✅ Understand what raw sequencing data looks like and why quality control matters
 - ✅ Run **FastQC**, **Fastp**, and **MultiQC** to assess and clean sequencing reads
 - ✅ Assemble a viral genome using **Setu** and **SPAdes**
-- ✅ Evaluate your assembly using **QUAST**, **BUSCO**, and **RagTag**
+- ✅ Evaluate your assembly using **QUAST**, **BUSCO**, and Scaffolding with **RagTag**
 - ✅ Understand what a "good" genome assembly looks like.
 
 ---

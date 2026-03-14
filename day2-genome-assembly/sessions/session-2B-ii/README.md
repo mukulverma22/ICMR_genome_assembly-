@@ -17,14 +17,13 @@ Assembling reads into contigs doesn't mean you're done. Your assembly could have
 
 **Quality Assessment (QA)** checks all of these problems before you trust your assembly for downstream analyses like gene prediction or variant calling.
 
-### The Three Pillars of Assembly QA
+### The Pillars of Assembly QA
 
 ```
 Assembly Quality
        │
        ├── Contiguity ──── QUAST  (how fragmented is it?)
        ├── Completeness ── BUSCO  (are expected genes present?)
-       └── Accuracy ─────  RagTag (how well does it match a reference?)
 ```
 
 ---

@@ -100,14 +100,17 @@ mkdir -p results/quast
 quast.py \
     assembly.fasta \
     --output-dir results/quast \
-    --threads 4
+    --threads 2
+```
+
+```bash
 
 # With reference genome (recommended — gives misassembly stats!)
 quast.py \
     assembly.fasta \
     --reference reference.fasta \
     --output-dir results/quast \
-    --threads 4 \
+    --threads 2 \
     --min-contig 500
 
 # Flag explanations:
@@ -225,7 +228,7 @@ busco \
     --out_path results/busco \
     --mode genome \
     --lineage_dataset bacteria_odb10 \
-    --cpu 4 \
+    --cpu 2 \
     --download_path ./busco_downloads
 
 # Flag explanations:
@@ -303,8 +306,8 @@ ragtag.py scaffold \
     reference.fasta \
     assembly.fasta \
     -o results/ragtag \
-    -t 4 \
-    -u
+    -t 2 \
+    
 
 # Flag explanations:
 # scaffold          : Module to use
@@ -348,7 +351,7 @@ quast.py \
     assembly.fasta \
     --reference reference.fasta \
     --output-dir results/quast_comparison \
-    --threads 4
+    --threads 2
 
 # This runs QUAST on BOTH assemblies simultaneously for comparison!
 ```
@@ -362,19 +365,19 @@ quast.py \
 # (run from sessions/session-2B-ii/ directory)
 
 # 1. QUAST
-quast.py assembly.fasta --reference reference.fasta -o results/quast -t 4
+quast.py assembly.fasta --reference reference.fasta -o results/quast -t 2
 
 # 2. BUSCO
 busco --in assembly.fasta --out busco_run --out_path results/busco \
-      --mode genome --lineage_dataset bacteria_odb10 --cpu 4
+      --mode genome --lineage_dataset bacteria_odb10 --cpu 2
 
 # 3. RagTag scaffolding
-ragtag.py scaffold reference.fasta assembly.fasta -o results/ragtag -t 4 -u
+ragtag.py scaffold reference.fasta assembly.fasta -o results/ragtag -t 2 -u
 
 # 4. QUAST on scaffolded assembly
 quast.py results/ragtag/ragtag.scaffold.fasta \
          --reference reference.fasta \
-         -o results/quast_scaffolded -t 4
+         -o results/quast_scaffolded -t 2
 ```
 
 ---

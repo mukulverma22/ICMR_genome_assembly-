@@ -36,18 +36,8 @@ Assembly Quality
 | `reference.fasta` | FASTA | Reference genome (optional but recommended) | Download or provided |
 | BUSCO lineage | Auto-downloaded | Gene database for completeness check | BUSCO downloads automatically |
 
-```bash
-# Navigate to assessment session directory
-cd sessions/session-2B-ii/
+/../data/sample/reference.fasta .
 
-# Link your assembly from Session 2B-i
-ln -s ../../results/spades_viral/scaffolds.fasta assembly.fasta
-
-# Download reference genome (example: SARS-CoV-2)
-# wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/009/858/895/...
-# OR use the provided reference in /data/sample/
-cp ../../data/sample/reference.fasta .
-```
 
 ---
 
@@ -94,14 +84,14 @@ Cumulative:
 ### Run QUAST
 
 ```bash
-mkdir -p results/quast
+mkdir -p quast
 
 # Without reference genome
 quast.py \
-    assembly.fasta \
-    --output-dir results/quast \
+    spades_viral/scaffolds.fasta \
+    --output-dir quast \
     --threads 2
-```
+``` 
 
 ```bash
 

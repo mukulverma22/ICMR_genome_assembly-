@@ -146,12 +146,12 @@ spades.py \
     -1 fastp/clean_R1.fastq \
     -2 fastp/clean_R2.fastq \
     -o spades_viral \
-    --threads 4 \
+    --threads 2 \
     --memory 8 \
     --careful \
     --cov-cutoff auto
 
-
+cle
 # Flag explanations:
 # -1 / -2         : Paired-end read files (R1 and R2)
 # -o              : Output directory

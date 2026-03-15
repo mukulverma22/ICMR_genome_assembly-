@@ -202,14 +202,22 @@ fastp \
     --thread 2
 
 # Flag explanations:
-# --in1/--in2              : Input files (R1 and R2)
-# --out1/--out2            : Clean output files
-# --html/--json            : Report formats
-# --qualified_quality_phred: Min quality score to keep a base (Q20)
-# --length_required        : Drop reads shorter than 50 bp after trimming
-# --detect_adapter_for_pe  : Auto-detect adapters for paired-end data
-# --correction             : Correct mismatched bases in overlapping regions
-# --thread                 : CPU threads
+# --in1/--in2              : Input paired-end FASTQ files (R1 and R2)
+# --out1/--out2            : Output cleaned FASTQ files
+# --html/--json            : Report output formats (HTML = visual, JSON = parseable)
+# --qualified_quality_phred: Min base quality threshold (Q20 = 1% error rate)
+# --length_required        : Drop reads shorter than 35 bp after trimming
+# --cut_right              : Sliding window trimming from the 3′ end
+# --cut_right_window_size  : Window size of 4 bases for the sliding scan
+# --cut_right_mean_quality : Cut when window mean quality drops below Q20
+# --trim_poly_g            : Remove poly-G tails (NextSeq/NovaSeq 2-colour artefact)
+# --poly_g_min_len         : Only trim poly-G tails of 10+ consecutive Gs
+# --trim_poly_x            : Remove any poly-X tail (poly-A, poly-C, poly-T artefacts)
+# --poly_x_min_len         : Only trim poly-X tails of 10+ consecutive identical bases
+# --n_base_limit           : Discard reads with more than 5 ambiguous N bases
+# --detect_adapter_for_pe  : Auto-detect and trim adapters for paired-end data
+# --correction             : Correct mismatched bases in read overlap regions using consensus
+# --thread                 : Number of CPU threads to use
 
 
 ```

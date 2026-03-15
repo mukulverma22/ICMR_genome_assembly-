@@ -229,8 +229,8 @@ grep ">" spades_viral/scaffolds.fasta | head -20
 
 ```
 results/
-├── setu_assembly/
-│   └── consensus.fasta         ← Setu viral assembly
+├── setu/ragout/
+│   └── setu_scaffolds.fasta         ← Setu viral assembly
 └── spades_viral/
     └── scaffolds.fasta         ← ✅ SPAdes assembly (use this)
 ```

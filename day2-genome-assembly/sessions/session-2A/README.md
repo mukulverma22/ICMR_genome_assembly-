@@ -51,14 +51,14 @@ IIIIIIIIIIIIIIIIIIIII         ← Quality scores (ASCII-encoded Phred scores)
 > 📥 **Get sample data:**
 > # Download from SRA (requires sra-tools)
 > ```bash
-> fasterq-dump --split-files --progress SRR11945456
+> fasterq-dump --split-files --progress SRR37582412	
 > ```
 
 ## Rename the Files :
 
  ```bash
-mv SRR11945456_1.fastq sample_R1.fastq
-mv SRR11945456_2.fastq sample_R2.fastq
+mv SRR37582412_1.fastq sample_R1.fastq
+mv SRR37582412_2.fastq sample_R2.fastq
  ```
 
 ---

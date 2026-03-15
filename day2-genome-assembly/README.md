@@ -9,7 +9,7 @@
 2. [Environment Setup](#environment-setup)
 3. [Session 2A — Quality Control](sessions/session-2A/README.md).
 4. [Session 2B-i — Genome Assembly](sessions/session-2B-i/README.md)
-5. [Session 2B-ii — Assembly Quality Assessment](sessions/session-2B-ii/README.mdt)
+5. [Session 2B-ii — Assembly Quality Assessment](sessions/session-2B-ii/README.md)
 6. [Glossary](#-glossary)
 
 

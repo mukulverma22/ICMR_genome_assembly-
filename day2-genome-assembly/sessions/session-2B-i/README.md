@@ -70,8 +70,8 @@ Contigs = 5,000         Contigs = 10
 
 | File | Format | Description |
 |------|--------|-------------|
-| `clean_R1.fastq` | FASTQ | Clean forward reads from Session 2A |
-| `clean_R2.fastq` | FASTQ | Clean reverse reads from Session 2A |
+| `setu_R1.fastq` | FASTQ | Clean forward reads from Session 2A |
+| `setu_R2.fastq` | FASTQ | Clean reverse reads from Session 2A |
 
 ---
 
@@ -103,8 +103,8 @@ conda env create -f env_setu.yml
 ## Rename the Files :
 
  ```bash
-mv SRR11945456_1.fastq sample_R1.fastq
-mv SRR11945456_2.fastq sample_R2.fastq
+mv SRR11945456_1.fastq setu_R1.fastq
+mv SRR11945456_2.fastq setu_R2.fastq
  ```
 
 ### Run Setu (Reference-Guided Viral Assembly)
@@ -112,7 +112,7 @@ mv SRR11945456_2.fastq sample_R2.fastq
 ```bash
 conda activate setu 
 mkdir -p ../setu_output
-./setu.sh -k yes -m pe -t 2 -r ../fastp/clean_R1.fastq,../fastp/clean_R2.fastq -f on -o ../setu_output
+./setu.sh -k yes -m pe -t 2 -r setu_R1.fastq,setu_R2.fastq -f on -o ../setu_output
 
 # Flag explanations:
 # -r  : Input clean reads
@@ -151,14 +151,15 @@ conda install -c bioconda spades -y
 # Verify
 spades.py --version
 ```
+## Get back to 
 
 ### Run SPAdes — Basic Assembly
 
 ```bash
 
 spades.py \
-    -1 fastp/clean_R1.fastq \
-    -2 fastp/clean_R2.fastq \
+    -1 setu/sequence_PR1_trimmed.fq  \
+    -2 setu/sequence_PR2_trimmed.fq  \
     -o spades_viral \
     --threads 2 \
     --memory 8 \
@@ -174,12 +175,6 @@ cle
 # Additional flags:
 # --careful       : Reduce mismatches (slower but more accurate for viruses)
 # --cov-cutoff auto : Automatically remove low-coverage (likely error) contigs
-```
-
-```bash
-
-
-
 ```
 
 ### SPAdes Output Files
@@ -221,14 +216,19 @@ Each sequence in the output has a name like:
 Before moving on, do a quick sanity check:
 
 ```bash
+cd setu
+
 # Count number of contigs/scaffolds
-grep -c ">" spades_viral/scaffolds.fasta
+grep -c ">" ragout/setu_scaffolds.fasta
 
 # Check total assembly size
-grep -v ">" spades_viral/scaffolds.fasta | tr -d '\n' | wc -c
+grep -v ">" ragout/setu_scaffolds.fasta | tr -d '\n' | wc -c
 
 # View the longest contigs
-grep ">" spades_viral/scaffolds.fasta | head -20
+grep ">" ragout/setu_scaffolds.fasta | head -20
+
+# Get back to parent directory
+cd ..
 ```
 
 **What to look for (viral genome example):**
@@ -260,12 +260,6 @@ results/
 | SPAdes crashes at k=127 | Read length too short | Omit large k values: `-k 21,33,55,77` |
 
 ---
-
-## ✅ Checklist Before Moving to Assessment
-
-- [ ] `scaffolds.fasta` exists in your SPAdes output directory
-- [ ] At least 1 contig is >1000 bp (check with `grep ">" scaffolds.fasta`)
-- [ ] SPAdes log shows "===== Assembling finished. ====="
 
 ---
 

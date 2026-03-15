@@ -191,7 +191,7 @@ fastp \
     --length_required 50 \
     --detect_adapter_for_pe \
     --correction \
-    --thread 4
+    --thread 2
 
 # Flag explanations:
 # --in1/--in2              : Input files (R1 and R2)

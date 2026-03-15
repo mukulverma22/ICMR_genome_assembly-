@@ -94,6 +94,19 @@ cd setu
 conda env create -f env_setu.yml
 ```
 
+> 📥 **Get sample data:**
+> # Download from SRA (requires sra-tools)
+> ```bash
+> fasterq-dump --split-files --progress SRR11945456
+> ```
+
+## Rename the Files :
+
+ ```bash
+mv SRR11945456_1.fastq sample_R1.fastq
+mv SRR11945456_2.fastq sample_R2.fastq
+ ```
+
 ### Run Setu (Reference-Guided Viral Assembly)
 
 ```bash

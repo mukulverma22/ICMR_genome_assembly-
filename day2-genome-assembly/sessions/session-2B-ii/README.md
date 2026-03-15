@@ -32,7 +32,7 @@ Assembly Quality
 
 | File | Format | Description | From |
 |------|--------|-------------|------|
-| `scaffolds.fasta` | FASTA | Your assembled genome | Session 2B-i (SPAdes) |
+| `contigs.fasta` | FASTA | Your assembled genome | Session 2B-i (SPAdes) |
 | `reference.fasta` | FASTA | Reference genome (optional but recommended) | Download or provided |
 | BUSCO lineage | Auto-downloaded | Gene database for completeness check | BUSCO downloads automatically |
 

@@ -7,7 +7,7 @@
 
 1. [What You Will Learn Today](#what-you-will-learn-today)
 2. [Environment Setup](#environment-setup)
-3. [Session 2A — Quality Control](#-Session-2A).
+3. [Session 2A — Quality Control](sessions/session-2A/README.md).
 4. [Session 2B-i — Genome Assembly](#-session-2b-i-genome-assembly)
 5. [Session 2B-ii — Assembly Quality Assessment](#-session-2b-ii-assembly-quality-assessment)
 6. [Glossary](#-glossary)

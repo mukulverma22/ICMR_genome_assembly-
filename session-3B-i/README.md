@@ -91,12 +91,10 @@ DNA doesn't mutate randomly. Some substitutions happen more often than others (e
 | File | Format | Description |
 |------|--------|-------------|
 | `sequences.fasta` | FASTA | Unaligned input sequences (DNA or protein) |
-| `outgroup.fasta` | FASTA | Optional: outgroup sequence to root the tree |
 
 ### What Should My Input Sequences Be?
 
 - **Minimum:** 4 sequences (trees with fewer are trivial)
-- **Recommended:** 10–100 sequences for a meaningful tree
 - **Format:** All sequences in one FASTA file, **unaligned** (different lengths are fine)
 
 ```bash
@@ -115,9 +113,9 @@ grep ">" sequences.fasta        # See all sequence names
 
 > 📥 **Get sample data:**
 > ```bash
-> # Download SARS-CoV-2 spike gene sequences from NCBI
-> # Or use the provided sample in data/sample/sequences.fasta
-> cp ../../data/sample/sequences.fasta .
+> # Download the provided sample using command
+> wget https://raw.githubusercontent.com/mukulverma22/ICMR_genome_assembly-/refs/heads/main/day2-genome-assembly/demo_phylo.fasta
+> mv demo_phylo.fasta sequences.fasta
 > ```
 
 ---
@@ -127,44 +125,6 @@ grep ">" sequences.fasta        # See all sequence names
 You have two excellent tools for MSA: **MUSCLE** and **MAFFT**. Both produce similar results; MAFFT is generally faster for large datasets.
 
 ---
-
-### Tool 1A: MUSCLE
-
-**MUSCLE** (Multiple Sequence Comparison by Log-Expectation) is a classic, reliable MSA tool known for accuracy on protein and DNA sequences.
-
-#### Install MUSCLE
-```bash
-conda install -c bioconda muscle -y
-
-# Verify
-muscle -version
-# Expected: MUSCLE v5.x
-```
-
-#### Run MUSCLE
-
-```bash
-mkdir -p results/alignment
-
-# MUSCLE v5 syntax
-muscle \
-    -align sequences.fasta \
-    -output results/alignment/aligned_muscle.fasta \
-    -threads 4
-
-# Older MUSCLE v3 syntax (if v5 not available)
-muscle \
-    -in sequences.fasta \
-    -out results/alignment/aligned_muscle.fasta \
-    -maxiters 16
-
-# Flag explanations:
-# -align / -in     : Input unaligned FASTA
-# -output / -out   : Output aligned FASTA
-# -threads         : CPU threads (v5 only)
-# -maxiters        : Max refinement iterations (more = slower but better)
-```
-
 ---
 
 ### Tool 1B: MAFFT
@@ -187,21 +147,14 @@ mafft \
     --auto \
     --thread 4 \
     --reorder \
-    sequences.fasta > results/alignment/aligned_mafft.fasta
-
-# For larger datasets (>200 sequences) — faster
-mafft \
-    --retree 2 \
-    --maxiterate 0 \
-    --thread 4 \
-    sequences.fasta > results/alignment/aligned_mafft.fasta
+    sequences.fasta > alignment/aligned_mafft.fasta
 
 # For high accuracy (small datasets <20 sequences)
 mafft \
     --localpair \
     --maxiterate 1000 \
     --thread 4 \
-    sequences.fasta > results/alignment/aligned_mafft.fasta
+    sequences.fasta > alignment/aligned_mafft.fasta
 
 # Flag explanations:
 # --auto           : Automatically choose strategy based on dataset size

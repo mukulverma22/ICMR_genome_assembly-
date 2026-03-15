@@ -188,7 +188,15 @@ fastp \
     --html fastp_report.html \
     --json fastp_report.json \
     --qualified_quality_phred 20 \
-    --length_required 50 \
+    --length_required 35 \
+    --cut_right \
+    --cut_right_window_size 4 \
+    --cut_right_mean_quality 20 \
+    --trim_poly_g \
+    --poly_g_min_len 10 \
+    --trim_poly_x \
+    --poly_x_min_len 10 \
+    --n_base_limit 5 \
     --detect_adapter_for_pe \
     --correction \
     --thread 2

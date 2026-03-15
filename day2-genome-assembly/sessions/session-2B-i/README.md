@@ -97,8 +97,9 @@ conda env create -f env_setu.yml
 ### Run Setu (Reference-Guided Viral Assembly)
 
 ```bash
+conda activate setu 
 mkdir -p ../setu_output
-./setu.sh -k yes -m pe -t 3 -r ../fastp/clean_R1.fastq,../fastp/clean_R2.fastq -f on -o ../setu_output
+./setu.sh -k yes -m pe -t 2 -r ../fastp/clean_R1.fastq,../fastp/clean_R2.fastq -f on -o ../setu_output
 
 # Flag explanations:
 # -r  : Input clean reads

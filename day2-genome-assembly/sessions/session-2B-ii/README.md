@@ -33,10 +33,9 @@ Assembly Quality
 | File | Format | Description | From | Download command |
 |------|--------|-------------|------|------------------|
 | `contigs.fasta` | FASTA | Assembled genome | Download or Provided |```wget https://raw.githubusercontent.com/mukulverma22/ICMR_genome_assembly-/refs/heads/main/day2-genome-assembly/contigs.fasta``` |
-| `reference.fasta` | FASTA | Reference genome (optional but recommended) | Download or provided | ```wget https://raw.githubusercontent.com/mukulverma22/ICMR_genome_assembly-/refs/heads/main/day2-genome-assembly/MTB.fna``` |
+| `MTB.fna` | FASTA | Reference genome (optional but recommended) | Download or provided | ```wget https://raw.githubusercontent.com/mukulverma22/ICMR_genome_assembly-/refs/heads/main/day2-genome-assembly/MTB.fna``` |
 | BUSCO lineage | Auto-downloaded | Gene database for completeness check | BUSCO downloads automatically |
 
-/../data/sample/reference.fasta .
 
 
 ---
@@ -86,35 +85,21 @@ Cumulative:
 ```bash
 mkdir -p quast
 
-# Without reference genome
 quast.py \
-    spades_viral/scaffolds.fasta \
+    contigs.fasta \
     --output-dir quast \
     --threads 2
-``` 
-
-```bash
-
-# With reference genome (recommended — gives misassembly stats!)
-quast.py \
-    assembly.fasta \
-    --reference reference.fasta \
-    --output-dir results/quast \
-    --threads 2 \
-    --min-contig 500
 
 # Flag explanations:
 # assembly.fasta      : Your assembled genome (from SPAdes)
-# --reference         : Known reference genome for comparison
 # --output-dir        : Where to save results
 # --threads           : CPU threads
-# --min-contig        : Ignore contigs shorter than this (bp)
 ```
 
 ### QUAST Output Files
 
 ```
-results/quast/
+quast/
 ├── report.html         ← ✅ Open this in your browser!
 ├── report.txt          ← Plain text summary
 ├── report.tsv          ← Tab-separated (import to Excel)
@@ -134,19 +119,8 @@ N50                           ← Most important! (higher = better)
 Misassemblies                 ← Only if reference provided (lower = better)
 Genome fraction (%)           ← % of reference covered (higher = better)
 ```
-
-**Example of a good viral assembly:**
-```
-# contigs        : 3
-Total length     : 29,903 bp    (matches SARS-CoV-2 genome size!)
-Largest contig   : 22,456 bp
-N50              : 22,456 bp
-N75              : 7,447 bp
-Genome fraction  : 99.8%        ← Excellent!
-Misassemblies    : 0            ← Perfect!
-```
-
 ---
+
 
 ## 🔧 Tool 2: BUSCO
 
@@ -210,12 +184,9 @@ busco --list-datasets
 ### Run BUSCO
 
 ```bash
-mkdir -p results/busco
-
 busco \
-    --in assembly.fasta \
+    --in contigs.fasta \
     --out busco_results \
-    --out_path results/busco \
     --mode genome \
     --lineage_dataset bacteria_odb10 \
     --cpu 2 \
@@ -234,7 +205,7 @@ busco \
 ### BUSCO Output
 
 ```
-results/busco/busco_results/
+busco_results/
 ├── short_summary.specific.bacteria_odb10.busco_results.txt  ← ✅ Key results
 ├── run_bacteria_odb10/
 │   ├── full_table.tsv       ← Status of each individual BUSCO gene
@@ -248,8 +219,8 @@ results/busco/busco_results/
 ```bash
 # Generate a summary plot (requires matplotlib)
 python3 -m busco.utils.plot_busco_summary \
-    results/busco/short_summary*.txt \
-    --output results/busco/busco_plot.png
+    busco_results/short_summary*.txt \
+    --output busco_plot.png
 ```
 
 ---
@@ -290,12 +261,12 @@ ragtag.py --version
 ### Run RagTag Scaffold
 
 ```bash
-mkdir -p results/ragtag
+mkdir -p ragtag
 
 ragtag.py scaffold \
-    reference.fasta \
-    assembly.fasta \
-    -o results/ragtag \
+    MTB.fasta \
+    contigs.fasta \
+    -o ragtag \
     -t 2 \
     
 
@@ -321,7 +292,7 @@ results/ragtag/
 ### Reading RagTag Stats
 
 ```bash
-cat results/ragtag/ragtag.scaffold.stats
+cat ragtag/ragtag.scaffold.stats
 ```
 
 ```
@@ -337,10 +308,9 @@ After RagTag, compare the scaffolded assembly to your original:
 
 ```bash
 quast.py \
-    results/ragtag/ragtag.scaffold.fasta \
+    ragtag/ragtag.scaffold.fasta \
     assembly.fasta \
-    --reference reference.fasta \
-    --output-dir results/quast_comparison \
+    --output-dir quast_comparison \
     --threads 2
 
 # This runs QUAST on BOTH assemblies simultaneously for comparison!
@@ -355,19 +325,15 @@ quast.py \
 # (run from sessions/session-2B-ii/ directory)
 
 # 1. QUAST
-quast.py assembly.fasta --reference reference.fasta -o results/quast -t 2
+quast.py assembly.fasta -o results/quast -t 2
 
 # 2. BUSCO
-busco --in assembly.fasta --out busco_run --out_path results/busco \
+busco --in assembly.fasta --out busco_results \
       --mode genome --lineage_dataset bacteria_odb10 --cpu 2
 
 # 3. RagTag scaffolding
 ragtag.py scaffold reference.fasta assembly.fasta -o results/ragtag -t 2 -u
 
-# 4. QUAST on scaffolded assembly
-quast.py results/ragtag/ragtag.scaffold.fasta \
-         --reference reference.fasta \
-         -o results/quast_scaffolded -t 2
 ```
 
 ---
@@ -393,8 +359,7 @@ results/
 ├── quast/
 │   ├── report.html             ← ✅ Assembly contiguity report
 │   └── report.txt
-├── busco/
-│   └── busco_results/
+├── busco_results/
 │       └── short_summary*.txt  ← ✅ Completeness summary
 ├── ragtag/
 │   └── ragtag.scaffold.fasta   ← ✅ Improved scaffolded assembly
@@ -415,14 +380,6 @@ results/
 | RagTag: All contigs unplaced | Reference genome mismatch | Verify reference is the same organism |
 
 ---
-
-## ✅ End-of-Day Checklist
-
-- [ ] QUAST report generated with N50 and genome fraction
-- [ ] BUSCO short summary shows completeness score
-- [ ] RagTag scaffolded assembly created
-- [ ] Final QUAST comparison shows improvement after scaffolding
-- [ ] You understand what each metric means
 
 ---
 

@@ -401,12 +401,4 @@ Scaffolded Genome Assembly ✅
 
 ---
 
-## ➡️ Where to Go Next
-
-- **Gene Annotation:** Use Prokka (bacteria) or Augustus (eukaryotes) to predict genes
-- **Variant Calling:** Map reads back to assembly and call variants with GATK or FreeBayes
-- **Comparative Genomics:** Compare your assembly to related organisms with MUMmer or LAST
-
----
-
 *See you at dinner! 🍽️*

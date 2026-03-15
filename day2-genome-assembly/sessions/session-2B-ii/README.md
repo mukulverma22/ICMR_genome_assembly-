@@ -32,8 +32,8 @@ Assembly Quality
 
 | File | Format | Description | From | Download command |
 |------|--------|-------------|------|------------------|
-| `contigs.fasta` | FASTA | Assembled genome | Download or Provided |https://raw.githubusercontent.com/mukulverma22/ICMR_genome_assembly-/refs/heads/main/day2-genome-assembly/contigs.fasta |
-| `reference.fasta` | FASTA | Reference genome (optional but recommended) | Download or provided |https://raw.githubusercontent.com/mukulverma22/ICMR_genome_assembly-/refs/heads/main/day2-genome-assembly/MTB.fna |
+| `contigs.fasta` | FASTA | Assembled genome | Download or Provided |```wget https://raw.githubusercontent.com/mukulverma22/ICMR_genome_assembly-/refs/heads/main/day2-genome-assembly/contigs.fasta``` |
+| `reference.fasta` | FASTA | Reference genome (optional but recommended) | Download or provided | ```wget https://raw.githubusercontent.com/mukulverma22/ICMR_genome_assembly-/refs/heads/main/day2-genome-assembly/MTB.fna``` |
 | BUSCO lineage | Auto-downloaded | Gene database for completeness check | BUSCO downloads automatically |
 
 /../data/sample/reference.fasta .

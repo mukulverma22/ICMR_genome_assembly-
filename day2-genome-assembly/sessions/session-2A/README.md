@@ -85,7 +85,9 @@ fastqc \
     sample_R1.fastq \
     sample_R2.fastq \
     --outdir fastqc
+```
 
+```
 # What each flag means:
 # --outdir    : Where to save the HTML reports
 # --threads   : Number of CPU cores to use (speeds things up)
@@ -134,11 +136,12 @@ mkdir -p multiqc
 multiqc \
     fastqc \
     --outdir multiqc
+```
 
+```
 # Flag explanations:
 # (input dirs)    : MultiQC searches these for recognized output files
 # --outdir        : Where to save the report
-
 
 ```
 
@@ -189,6 +192,9 @@ fastp \
     --detect_adapter_for_pe \
     --correction \
     --thread 2
+```
+
+```
 
 # Flag explanations:
 # --in1/--in2              : Input paired-end FASTQ files (R1 and R2)

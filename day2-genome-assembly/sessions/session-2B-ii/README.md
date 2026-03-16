@@ -151,10 +151,8 @@ C:45.3% [S:44.9%, D:0.4%], F:8.2%, M:46.5%
 ← Only 45% of expected genes found! Very incomplete assembly.
 ```
 
-### Install BUSCO
+### Verify the installation of BUSCO
 ```bash
-conda install -c bioconda busco -y
-
 # Verify
 busco --version
 ```

@@ -218,17 +218,13 @@ iqtree --version
 ```bash
 mkdir -p iqtree
 
-iqtree \
-    -s alignment/aligned_mafft.fasta \
-    -m TEST \
-    -bb 1000 \
-    -nt AUTO \
-    --prefix iqtree/mytree
+iqtree -s alignment/aligned_mafft.fasta -m TEST -bb 1000 -o Seq6_Mus_musculus_OUTGROUP -nt 2 --prefix iqtree/newtree
 
 # Flag explanations:
 # -s        : Input aligned FASTA
 # -m TEST   : Run ModelFinder to auto-select best substitution model
 # -bb 1000  : Ultrafast bootstrap with 1000 replicates (adds support values)
+# -o        : Outgroup for rooting 
 # -nt AUTO  : Auto-detect number of CPU threads
 # --prefix  : Prefix for all output files
 ```

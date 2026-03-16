@@ -91,7 +91,9 @@ quast.py \
     contigs.fasta \
     --output-dir quast \
     --threads 2
+```
 
+```
 # Flag explanations:
 # assembly.fasta      : Your assembled genome (from SPAdes)
 # --output-dir        : Where to save results
@@ -169,6 +171,8 @@ BUSCO has different gene databases for different organism groups:
 # List available lineages
 busco --list-datasets
 
+```
+```
 # Common lineages:
 # bacteria_odb10    ← Bacterial genomes
 # fungi_odb10       ← Fungal genomes
@@ -191,6 +195,9 @@ busco \
     --lineage_dataset bacteria_odb10 \
     --cpu 2 \
     --download_path ./busco_downloads
+```
+
+```
 
 # Flag explanations:
 # --in              : Input assembly (FASTA)
@@ -273,8 +280,9 @@ ragtag.py scaffold \
     contigs.fasta \
     -o ragtag \
     -t 2 \
+```
     
-
+```
 # Flag explanations:
 # scaffold          : Module to use
 # reference.fasta   : Reference genome to scaffold against
@@ -317,7 +325,8 @@ quast.py \
     contigs.fasta \
     --output-dir quast_comparison \
     --threads 2
-
+```
+```
 # This runs QUAST on BOTH assemblies simultaneously for comparison!
 ```
 

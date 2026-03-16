@@ -353,7 +353,6 @@ phylo/
 
 - [IQ-TREE Tutorial](http://www.iqtree.org/doc/Tutorial)
 - [MAFFT Manual](https://mafft.cbrc.jp/alignment/software/manual/manual.html)
-- [Phylogenetics — a practical introduction (Baum & Smith)](https://www.sinauer.com/tree-thinking.html)
 - [iTOL Documentation](https://itol.embl.de/help.cgi)
 
 ---

@@ -269,7 +269,7 @@ ragtag.py --version
 mkdir -p ragtag
 
 ragtag.py scaffold \
-    MTB.fasta \
+    MTB.fna \
     contigs.fasta \
     -o ragtag \
     -t 2 \

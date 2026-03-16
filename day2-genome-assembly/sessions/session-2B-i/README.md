@@ -91,7 +91,6 @@ Contigs = 5,000         Contigs = 10
 git clone https://github.com/jnarayan81/setu.git
 # install the Dependencies:
 cd setu
-conda env create -f env_setu.yml
 ```
 
 > 📥 **Get sample data:**
@@ -113,22 +112,14 @@ mv SRR11945456_2.fastq setu_R2.fastq
 conda activate setu 
 mkdir -p ../setu_output
 ./setu.sh -k yes -m pe -t 2 -r setu_R1.fastq,setu_R2.fastq -f on -o ../setu_output
+```
 
+```
 # Flag explanations:
 # -r  : Input clean reads
 # -o  : Output directory
 # -t  : CPU threads
 # -m  : mode (single/paired-end)
-```
-
-### Setu Output Files
-
-```
-results/setu_assembly/
-├── consensus.fasta          ← ✅ Final assembled viral genome
-├── coverage.txt             ← Per-base read depth across genome
-├── variants.vcf             ← Detected variants vs reference
-└── assembly_stats.txt       ← Summary statistics
 ```
 
 ---
@@ -146,8 +137,6 @@ It uses a **multi-k-mer De Bruijn Graph** approach — running the assembly at m
 
 ### Install SPAdes
 ```bash
-conda install -c bioconda spades -y
-
 # Verify
 spades.py --version
 ```
@@ -163,10 +152,10 @@ spades.py \
     -o spades_viral \
     --threads 2 \
     --memory 8 \
-    --careful \
     --cov-cutoff auto
+```
 
-cle
+```
 # Flag explanations:
 # -1 / -2         : Paired-end read files (R1 and R2)
 # -o              : Output directory
@@ -220,13 +209,16 @@ cd setu
 
 # Count number of contigs/scaffolds
 grep -c ">" ragout/setu_scaffolds.fasta
-
+```
+```
 # Check total assembly size
 grep -v ">" ragout/setu_scaffolds.fasta | tr -d '\n' | wc -c
-
+```
+```
 # View the longest contigs
 grep ">" ragout/setu_scaffolds.fasta | head -20
-
+```
+```
 # Get back to parent directory
 cd ..
 ```

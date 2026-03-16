@@ -78,9 +78,6 @@ Cumulative:
 | N50 Interpretation | Meaning |
 |-------------------|---------|
 | N50 = genome size | Perfect single contig assembly |
-| N50 ≥ 1 Mb | Excellent (chromosomal level) |
-| N50 ≥ 100 kb | Good (scaffold level) |
-| N50 < 10 kb | Poor (highly fragmented) |
 
 ### Run QUAST
 

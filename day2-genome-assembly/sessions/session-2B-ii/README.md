@@ -314,7 +314,7 @@ After RagTag, compare the scaffolded assembly to your original:
 ```bash
 quast.py \
     ragtag/ragtag.scaffold.fasta \
-    assembly.fasta \
+    contigs.fasta \
     --output-dir quast_comparison \
     --threads 2
 

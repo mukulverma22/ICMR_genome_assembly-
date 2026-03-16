@@ -109,6 +109,9 @@ DNA doesn't mutate randomly. Some substitutions happen more often than others (e
 grep -c ">" sequences.fasta    # Count sequences
 grep ">" sequences.fasta        # See all sequence names
 
+```
+
+```
 # Example of what unaligned sequences look like:
 # >Virus_A_2020
 # ATCGATCGATCGATCG
@@ -155,7 +158,8 @@ mafft \
     --maxiterate 1000 \
     --thread 4 \
     sequences.fasta > alignment/aligned_mafft.fasta
-
+```
+```
 # Flag explanations:
 # --auto           : Automatically choose strategy based on dataset size
 # --thread         : CPU threads
@@ -218,7 +222,9 @@ iqtree --version
 ```bash
 mkdir -p iqtree
 
-iqtree -s alignment/aligned_mafft.fasta -m TEST -bb 1000 -o Seq6_Mus_musculus_OUTGROUP -nt 2 --prefix iqtree/newtree
+iqtree -s alignment/aligned_mafft.fasta -m TEST -bb 1000 -o Seq6_Mus_musculus_OUTGROUP -nt 2 --prefix iqtree/mytree
+```
+```
 
 # Flag explanations:
 # -s        : Input aligned FASTA
@@ -246,10 +252,12 @@ iqtree/
 ```bash
 # See which model was chosen
 grep "Best-fit model" iqtree/mytree.iqtree
-
+```
+```
 # See log-likelihood score
 grep "Log-likelihood" iqtree/mytree.iqtree
-
+```
+```
 # See tree in Newick format
 cat iqtree/mytree.treefile
 ```

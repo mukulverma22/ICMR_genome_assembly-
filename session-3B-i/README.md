@@ -211,7 +211,6 @@ You have two powerful ML tree-building tools: **IQ-TREE** (recommended for begin
 ```bash
 # Verify
 iqtree --version
-# Expected: IQ-TREE multicore version 2.x
 ```
 
 #### Run IQ-TREE — Standard Analysis

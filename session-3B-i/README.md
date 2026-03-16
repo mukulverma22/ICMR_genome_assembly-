@@ -1,7 +1,5 @@
 # 🖥️ Session 3B(i): Sequence Alignment & Phylogenetic Tree Construction
 
-**⏰ Time:** 14:00 – 14:30  
-**👨‍🏫 Instructor:** Mukul  
 **🎯 Goal:** Align multiple sequences, build a maximum likelihood phylogenetic tree, and visualize it  
 **🛠️ Tools:** MUSCLE · MAFFT · RAxML · IQ-TREE · FigTree / iTOL
 
@@ -92,6 +90,15 @@ DNA doesn't mutate randomly. Some substitutions happen more often than others (e
 |------|--------|-------------|
 | `sequences.fasta` | FASTA | Unaligned input sequences (DNA or protein) |
 
+> 📥 **Get sample data:**
+> ```bash
+> mkdir phylo
+> cd phylo
+> # Download the provided sample using command
+> wget https://raw.githubusercontent.com/mukulverma22/ICMR_genome_assembly-/refs/heads/main/day2-genome-assembly/demo_phylo.fasta
+> mv demo_phylo.fasta sequences.fasta
+> ```
+
 ### What Should My Input Sequences Be?
 
 - **Minimum:** 4 sequences (trees with fewer are trivial)
@@ -111,13 +118,6 @@ grep ">" sequences.fasta        # See all sequence names
 # AGCGATCGATCGATCGATCG
 ```
 
-> 📥 **Get sample data:**
-> ```bash
-> # Download the provided sample using command
-> wget https://raw.githubusercontent.com/mukulverma22/ICMR_genome_assembly-/refs/heads/main/day2-genome-assembly/demo_phylo.fasta
-> mv demo_phylo.fasta sequences.fasta
-> ```
-
 ---
 
 ## 🔧 Step 1: Multiple Sequence Alignment (MSA)
@@ -127,14 +127,12 @@ You have two excellent tools for MSA: **MUSCLE** and **MAFFT**. Both produce sim
 ---
 ---
 
-### Tool 1B: MAFFT
+### Tool 1: MAFFT
 
 **MAFFT** (Multiple Alignment using Fast Fourier Transform) is faster than MUSCLE for large datasets and has several alignment strategies to choose from.
 
-#### Install MAFFT
+#### Verify installation of MAFFT
 ```bash
-conda install -c bioconda mafft -y
-
 # Verify
 mafft --version
 ```
@@ -148,7 +146,8 @@ mafft \
     --thread 4 \
     --reorder \
     sequences.fasta > alignment/aligned_mafft.fasta
-
+```
+```
 # For high accuracy (small datasets <20 sequences)
 mafft \
     --localpair \
@@ -181,15 +180,10 @@ mafft \
 After aligning, all sequences should be the **same length** (gaps fill the differences):
 
 ```bash
-# All sequences should now be the same length
-awk '/^>/{if(seq) print length(seq); seq=""} !/^>/{seq=seq$0} END{print length(seq)}' \
-    results/alignment/aligned_mafft.fasta | sort -u
 
 # Visualize the alignment (terminal)
-head -40 results/alignment/aligned_mafft.fasta
+head -40 alignment/aligned_mafft.fasta
 
-# Count alignment columns (= length of any sequence)
-awk 'NR==2{print length($0); exit}' results/alignment/aligned_mafft.fasta
 ```
 
 > 💡 **Visualize your alignment properly** using [AliView](https://ormbunkar.se/aliview/) (free desktop app) or upload to [Wasabi](http://wasabi2.biocsc.fi/) (online). Look for:
@@ -201,21 +195,19 @@ awk 'NR==2{print length($0); exit}' results/alignment/aligned_mafft.fasta
 
 ## 🔧 Step 2: Phylogenetic Tree Construction
 
-You have two powerful ML tree-building tools: **IQ-TREE** (recommended for beginners) and **RAxML**.
+You have two powerful ML tree-building tools: **IQ-TREE** (recommended for beginners).
 
 ---
 
-### Tool 2A: IQ-TREE ⭐ (Recommended)
+### Tool 2: IQ-TREE ⭐ (Recommended)
 
 **IQ-TREE** is the modern, user-friendly ML tree builder. It:
 - **Automatically selects the best substitution model** (ModelFinder)
 - Runs ultrafast bootstrap in one command
 - Is faster and often more accurate than RAxML for most datasets
 
-#### Install IQ-TREE
+#### Verify the installation of  IQ-TREE
 ```bash
-conda install -c bioconda iqtree -y
-
 # Verify
 iqtree2 --version
 # Expected: IQ-TREE multicore version 2.x
@@ -227,11 +219,11 @@ iqtree2 --version
 mkdir -p results/iqtree
 
 iqtree2 \
-    -s results/alignment/aligned_mafft.fasta \
+    -s alignment/aligned_mafft.fasta \
     -m TEST \
     -bb 1000 \
     -nt AUTO \
-    --prefix results/iqtree/mytree
+    --prefix iqtree/mytree
 
 # Flag explanations:
 # -s        : Input aligned FASTA
@@ -241,24 +233,11 @@ iqtree2 \
 # --prefix  : Prefix for all output files
 ```
 
-#### Run IQ-TREE — With Outgroup (to root the tree)
-
-```bash
-iqtree2 \
-    -s results/alignment/aligned_mafft.fasta \
-    -m TEST \
-    -bb 1000 \
-    -nt AUTO \
-    -o "OutgroupSequenceName" \
-    --prefix results/iqtree/mytree_rooted
-
-# -o "Name" : Outgroup sequence name (must exactly match FASTA header)
-```
 
 #### IQ-TREE Output Files
 
 ```
-results/iqtree/
+iqtree/
 ├── mytree.treefile         ← ✅ Your phylogenetic tree (Newick format)
 ├── mytree.iqtree           ← Full analysis report (model, log-likelihood, etc.)
 ├── mytree.log              ← Log file
@@ -270,90 +249,17 @@ results/iqtree/
 
 ```bash
 # See which model was chosen
-grep "Best-fit model" results/iqtree/mytree.iqtree
+grep "Best-fit model" iqtree/mytree.iqtree
 
 # See log-likelihood score
-grep "Log-likelihood" results/iqtree/mytree.iqtree
+grep "Log-likelihood" iqtree/mytree.iqtree
 
 # See tree in Newick format
-cat results/iqtree/mytree.treefile
+cat iqtree/mytree.treefile
 ```
 
 ---
 
-### Tool 2B: RAxML
-
-**RAxML** (Randomized Axelerated Maximum Likelihood) is a battle-tested, high-performance ML tree builder. Preferred for very large datasets (hundreds to thousands of sequences).
-
-#### Install RAxML
-```bash
-conda install -c bioconda raxml -y
-# OR install the newer RAxML-NG
-conda install -c bioconda raxml-ng -y
-
-# Verify
-raxmlHPC --version
-# OR
-raxml-ng --version
-```
-
-#### Run RAxML (Classic)
-
-```bash
-mkdir -p results/raxml
-
-# Standard ML search with bootstrap
-raxmlHPC \
-    -s results/alignment/aligned_mafft.fasta \
-    -n mytree \
-    -m GTRGAMMA \
-    -p 12345 \
-    -x 12345 \
-    -# 100 \
-    -w $(pwd)/results/raxml \
-    -T 4
-
-# Flag explanations:
-# -s         : Input aligned FASTA
-# -n         : Run name (prefix for output files)
-# -m GTRGAMMA: Substitution model (GTR + Gamma rate variation)
-# -p 12345   : Random seed for reproducibility
-# -x 12345   : Bootstrap random seed
-# -# 100     : Number of bootstrap replicates (100 is standard)
-# -w         : Output directory (MUST be absolute path!)
-# -T 4       : CPU threads
-```
-
-#### Run RAxML-NG (Modern version)
-
-```bash
-raxml-ng \
-    --all \
-    --msa results/alignment/aligned_mafft.fasta \
-    --model GTR+G \
-    --prefix results/raxml/mytree \
-    --bs-trees 100 \
-    --threads 4 \
-    --seed 12345
-
-# --all      : Run ML search + bootstrap in one step
-# --msa      : Input aligned FASTA
-# --model    : Substitution model
-# --bs-trees : Number of bootstrap replicates
-```
-
-#### RAxML Output Files
-
-```
-results/raxml/
-├── RAxML_bestTree.mytree         ← ✅ Best ML tree
-├── RAxML_bipartitions.mytree     ← ✅ Best tree WITH bootstrap values
-├── RAxML_bootstrap.mytree        ← All 100 bootstrap trees
-├── RAxML_info.mytree             ← Run statistics and model parameters
-└── RAxML_log.mytree              ← Log-likelihood per iteration
-```
-
-> ✅ **Use `RAxML_bipartitions.mytree` for visualization** — it has the bootstrap support values on the nodes.
 
 ### IQ-TREE vs RAxML — When to Use Which?
 
@@ -380,35 +286,7 @@ This is not human-readable. You need a visualization tool.
 
 ---
 
-### Option A: FigTree (Desktop — Recommended for Beginners)
-
-**FigTree** is a free desktop app for viewing and annotating Newick/Nexus trees.
-
-#### Install FigTree
-```bash
-# Download from: http://tree.bio.ed.ac.uk/software/figtree/
-# OR via conda
-conda install -c bioconda figtree -y
-```
-
-#### Open Your Tree
-```bash
-figtree results/iqtree/mytree.treefile
-```
-
-#### Key FigTree Options
-
-| Feature | Where to find it | What it does |
-|---------|-----------------|--------------|
-| Bootstrap values | Node Labels → Label → "label" | Show support values on nodes |
-| Branch lengths | Trees → Scale bar | Toggle branch length display |
-| Root tree | Trees → Root tree → midpoint | Root using midpoint method |
-| Colour branches | Appearance → Colour by | Colour-code by metadata |
-| Export | File → Export PDF/SVG | Save publication-quality image |
-
----
-
-### Option B: iTOL (Online — Best for Publication Figures)
+### iTOL (Online — Best for Publication Figures)
 
 **iTOL** (Interactive Tree of Life) is a powerful web-based tool at [itol.embl.de](https://itol.embl.de).
 
@@ -417,7 +295,7 @@ figtree results/iqtree/mytree.treefile
 # Supports: annotation, colouring, circular/rectangular layouts, export
 
 # Your tree file to upload:
-cat results/iqtree/mytree.treefile
+cat iqtree/mytree.treefile
 ```
 
 **iTOL features:**
@@ -428,67 +306,18 @@ cat results/iqtree/mytree.treefile
 
 ---
 
-### Option C: Command-Line Quick View
-
-```bash
-# Install ETE toolkit for command-line tree viewing
-pip install ete3
-
-python3 -c "
-from ete3 import Tree
-t = Tree('results/iqtree/mytree.treefile')
-print(t.get_ascii(show_internal=True))
-"
-```
-
----
-
-## 📊 Full Pipeline — All Commands in One Place
-
-```bash
-# ── 0. Setup ──────────────────────────────────────────────
-mkdir -p results/{alignment,iqtree,raxml}
-cp ../../data/sample/sequences.fasta .
-
-# ── 1. Align with MAFFT ───────────────────────────────────
-mafft --auto --thread 4 --reorder \
-    sequences.fasta > results/alignment/aligned.fasta
-
-# Verify alignment (all lengths should be equal)
-awk '/^>/{if(seq)print length(seq); seq=""} !/^>/{seq=seq$0} END{print length(seq)}' \
-    results/alignment/aligned.fasta | sort -u
-
-# ── 2. Build ML tree with IQ-TREE ─────────────────────────
-iqtree2 \
-    -s results/alignment/aligned.fasta \
-    -m TEST \
-    -bb 1000 \
-    -nt AUTO \
-    --prefix results/iqtree/mytree
-
-# ── 3. Check results ──────────────────────────────────────
-grep "Best-fit model" results/iqtree/mytree.iqtree
-cat results/iqtree/mytree.treefile
-
-# ── 4. Visualize ──────────────────────────────────────────
-figtree results/iqtree/mytree.treefile
-# OR upload mytree.treefile to https://itol.embl.de
-```
-
 ---
 
 ## 📊 Expected Output Structure
 
 ```
-results/
+phylo/
 ├── alignment/
-│   ├── aligned_muscle.fasta     ← MUSCLE alignment
 │   └── aligned_mafft.fasta      ← MAFFT alignment (use this)
 ├── iqtree/
-│   ├── mytree.treefile          ← ✅ Your ML tree
-│   └── mytree.iqtree            ← Model and stats report
-└── raxml/
-    └── RAxML_bipartitions.mytree ← ✅ RAxML tree with bootstrap
+    ├── mytree.treefile          ← ✅ Your ML tree
+    └── mytree.iqtree            ← Model and stats report
+
 ```
 
 ---
@@ -521,29 +350,6 @@ results/
 - **Very long outlier branch** = possible contamination or sequencing error — investigate!
 
 ---
-
-## ✅ Checklist
-
-- [ ] Input sequences are in a single FASTA file
-- [ ] Alignment completed — all sequences same length
-- [ ] Alignment visually inspected in AliView or similar
-- [ ] IQ-TREE tree file generated (`mytree.treefile`)
-- [ ] Bootstrap support values present
-- [ ] Tree visualized in FigTree or iTOL
-- [ ] Suspicious long branches investigated
-
----
-
-## 🚨 Common Errors & Fixes
-
-| Error | Likely Cause | Fix |
-|-------|--------------|-----|
-| `Sequence not the same length` | Alignment step was skipped | Run MAFFT/MUSCLE first |
-| IQ-TREE: `Identical sequences found` | Duplicate sequences | Remove duplicates with `seqkit rmdup -s` |
-| RAxML: `ERROR: Alignment file does not exist` | Wrong path | Use absolute path with `-w $(pwd)/...` |
-| Bootstrap values all 0 or 100 | Very short/identical sequences | Check alignment quality |
-| Tree has polytomies (star topology) | Sequences too divergent or too similar | Check if sequences are appropriate for comparison |
-| Long runtime | Large alignment | Use `--fast` in IQ-TREE or reduce sequences |
 
 ---
 

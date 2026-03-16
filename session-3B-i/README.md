@@ -1,7 +1,7 @@
 # 🖥️ Session 3B(i): Sequence Alignment & Phylogenetic Tree Construction
 
 **🎯 Goal:** Align multiple sequences, build a maximum likelihood phylogenetic tree, and visualize it  
-**🛠️ Tools:** MUSCLE · MAFFT · RAxML · IQ-TREE · FigTree / iTOL
+**🛠️ Tools:** MAFFT · IQ-TREE · iTOL
 
 ---
 

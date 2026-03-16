@@ -68,11 +68,8 @@ mv SRR37582412_2.fastq sample_R2.fastq
 ### What is FastQC?
 FastQC is a quality control tool that scans your FASTQ files and generates an **HTML report** with visual plots showing the quality of your data across multiple metrics.
 
-### Install FastQC
+### Verify installation of FastQC
 ```bash
-# Via conda
-conda install -c bioconda fastqc -y
-
 # Verify
 fastqc --version
 ```
@@ -124,9 +121,7 @@ MultiQC aggregates QC results from **multiple samples and tools** into a single 
 
 ### Install MultiQC
 ```bash
-conda install -c bioconda multiqc -y
-# OR
-pip install multiqc
+multiqc --version
 ```
 
 ### Run MultiQC
@@ -149,10 +144,6 @@ multiqc \
 
 > 💡 **Pro tip:** You can simply run `multiqc .` from your project directory and it will find everything automatically!
 
-### Reading the MultiQC Report
-
-Open `results/multiqc/multiqc_report.html` in your browser.
-
 ---
 
 ## 🔧 Tool : Fastp
@@ -168,8 +159,6 @@ Fastp is an **all-in-one** FASTQ preprocessor that:
 
 ### Install Fastp
 ```bash
-conda install -c bioconda fastp -y
-
 # Verify
 fastp --version
 ```
@@ -225,7 +214,7 @@ fastp \
 ### What does Fastp output?
 
 ```
-results/fastp/
+fastp/
 ├── clean_R1.fastq.gz   ← Your cleaned reads (USE THESE GOING FORWARD)
 ├── clean_R2.fastq.gz   ← Your cleaned reads
 ├── fastp_report.html   ← Visual report

@@ -1,6 +1,5 @@
 # 🖥️ Session 2B-ii: Assembly Quality Assessment
 
-**⏰ Time:** 16:00 – 18:00  
 **🎯 Goal:** Evaluate your assembled genome for quality, completeness, and contamination  
 **🛠️ Tools:** QUAST · BUSCO · RagTag
 
@@ -24,6 +23,11 @@ Assembly Quality
 
         Contiguity ──── QUAST  (how fragmented is it?)
         Completeness ── BUSCO  (are expected genes present?)
+```
+```
+## Activate conda environment
+conda activate work
+ 
 ```
 
 ---

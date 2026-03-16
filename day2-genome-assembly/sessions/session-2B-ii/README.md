@@ -215,12 +215,18 @@ busco_results/
 ```
 
 ### Visualize BUSCO Results
+```
+## Download the required script:
+cd busco_results/
+wget https://raw.githubusercontent.com/mukulverma22/ICMR_genome_assembly-/refs/heads/main/day2-genome-assembly/Busco_plot.py
+
+```
 
 ```bash
+
 # Generate a summary plot (requires matplotlib)
-python3 -m busco.utils.plot_busco_summary \
-    busco_results/short_summary*.txt \
-    --output busco_plot.png
+ python Busco_plot.py short_summary.specific.bacteria_odb10.busco_results.txt
+
 ```
 
 ---
@@ -252,6 +258,7 @@ After RagTag (ordered scaffolds based on reference):
 
 ### Install RagTag
 ```bash
+cd ..
 # Verify
 ragtag.py --version
 ```

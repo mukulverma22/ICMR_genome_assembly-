@@ -48,10 +48,8 @@ Assembly Quality
 - How long are the contigs? (longer = better)
 - If given a reference: Where are the misassemblies?
 
-### Install QUAST
+### Verify installation of QUAST
 ```bash
-conda install -c bioconda quast -y
-
 # Verify
 quast.py --version
 ```
@@ -252,8 +250,6 @@ After RagTag (ordered scaffolds based on reference):
 
 ### Install RagTag
 ```bash
-conda install -c bioconda ragtag -y
-
 # Verify
 ragtag.py --version
 ```

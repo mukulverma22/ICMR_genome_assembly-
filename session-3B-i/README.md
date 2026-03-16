@@ -210,16 +210,16 @@ You have two powerful ML tree-building tools: **IQ-TREE** (recommended for begin
 #### Verify the installation of  IQ-TREE
 ```bash
 # Verify
-iqtree2 --version
+iqtree --version
 # Expected: IQ-TREE multicore version 2.x
 ```
 
 #### Run IQ-TREE — Standard Analysis
 
 ```bash
-mkdir -p results/iqtree
+mkdir -p iqtree
 
-iqtree2 \
+iqtree \
     -s alignment/aligned_mafft.fasta \
     -m TEST \
     -bb 1000 \

@@ -117,8 +117,6 @@ Key metrics to check in `report.txt`:
 Total length                  ← Should match expected genome size
 Largest contig                ← Longest single contig
 N50                           ← Most important! (higher = better)
-Misassemblies                 ← Only if reference provided (lower = better)
-Genome fraction (%)           ← % of reference covered (higher = better)
 ```
 ---
 

@@ -135,6 +135,7 @@ You have two excellent tools for MSA: **MUSCLE** and **MAFFT**. Both produce sim
 ```bash
 # Verify
 mafft --version
+mkdir -p alignment
 ```
 
 #### Run MAFFT

@@ -264,20 +264,6 @@ cat iqtree/mytree.treefile
 
 ---
 
-
-### IQ-TREE vs RAxML — When to Use Which?
-
-| Situation | Recommendation |
-|-----------|---------------|
-| General use / teaching | **IQ-TREE** — easier, auto model selection |
-| <500 sequences | **IQ-TREE** |
-| >500 sequences | **RAxML** — better parallelization |
-| Need model testing | **IQ-TREE** (built-in ModelFinder) |
-| Need fast bootstrap | **IQ-TREE** (UFBoot is much faster) |
-| Publication (large phylogenomics) | **RAxML-NG** or **IQ-TREE** |
-
----
-
 ## 🔧 Step 3: Tree Visualization & Annotation
 
 Your tree is currently in **Newick format** — a text representation using brackets:

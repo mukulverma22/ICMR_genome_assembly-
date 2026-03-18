@@ -169,15 +169,6 @@ mafft \
 # --maxiterate     : Number of iterative refinements (1000 = thorough)
 ```
 
-### MAFFT Strategy Cheat Sheet
-
-| Dataset Size | Recommended Strategy | Flag |
-|-------------|---------------------|------|
-| <20 sequences | L-INS-i (highest accuracy) | `--localpair --maxiterate 1000` |
-| 20–200 sequences | G-INS-i | `--globalpair --maxiterate 1000` |
-| 200–10,000 sequences | FFT-NS-2 | `--retree 2` |
-| >10,000 sequences | FFT-NS-1 (fastest) | `--retree 1` |
-
 ---
 
 ### Checking Your Alignment
